@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Play Audio Example</title>
+</head>
+<body>
+    <!-- 音频元素，提供多个音频源 -->
+    <audio id="myAudio">
+       <source src="7.mp3" type="7/mpeg">
+       <source src="7.ogg" type="7/ogg">
+       Your browser does not support the audio element.
+    </audio>
+
+    <!-- 按钮 -->
+    <button onclick="playAudio()">播放音频</button>
+
+    <script>
+        // JavaScript 函数，点击按钮时播放音频
+        function playAudio() {
+            let audio = document.getElementById("myAudio");
+            audio.play().catch(error => {
+                console.error("Error playing audio:", error);
+            });
+        }
+    </script>
+</body>
+</html>
