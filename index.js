@@ -1,2 +1,8 @@
-const timeoutId = setTimeout(() => window.alert("Hello"), 3000);
-clearTimeout(timeoutId);
+try{
+    console.log("YES");
+    console.lag(x);
+}
+catch(error) {
+    console.error(error);
+}
+console.log(Math.PI);

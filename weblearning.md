@@ -812,6 +812,26 @@ console.log("task 2");
 //不用等到task1执行完，task2就可以开始执行
 ```
 
+# Error对象
+
+当程序出现错误，会影响我们执行之后的操作。
+
+try-catch块。
+当try中的代码发生错误，会跳转到catch块，否则执行完try块中的代码。
+
+```javascript
+try {
+    //可能发生错误的代码
+    throw new Error("Error message");//可以手动扔出错误信息
+} catch(error) {
+    console.log(error);//可以发送错误信息
+    console.error(error);//将错误信息高亮
+} finally {
+    //这是可选的，总是会执行。
+    //常用来清理资源（关闭文件，连接等）
+}
+```
+
 # 一些东西
 
 扔骰子
