@@ -1,9 +1,3 @@
-# 什么事DOM
-
-Document object model
-
-通过DOM，javascript可以访问、更改html中的元素。
-
 # Math对象
 
 提供了一些数学函数
@@ -831,6 +825,141 @@ try {
     //常用来清理资源（关闭文件，连接等）
 }
 ```
+
+# DOM（Document object model）
+
+DOM是网页页面上的对象，提供了接口进行交互。
+通过DOM，javascript可以动态地访问、更改html中的元素。
+
+DOM 将 HTML 文档组织为一个树形结构，树中的每个节点都代表文档的一部分，如元素、属性、文本等。
+
+```
+document
+│
+├──html
+    │
+    ├──head
+    ├──body
+```
+
+可以修改样式。
+```javascript
+document.body.style.backgroundColor = "black";
+```
+
+## DOM选择器
+
+1. `getElementById(id)`
+返回元素或者NULL
+
+2. `getElementClassName(className)`
+根据元素的 class 名称获取一组元素。
+返回一个类数组的对象 HTMLCollection，包含所有具有指定类名的元素（或空集合）。
+用[]来访问每一个。
+HTMLCollection没有forEach方法，可以使用Array.from()来转换成数组。
+
+3. `getElementsByTagName(tagName)`
+根据元素的标签名称获取一组元素。
+返回一个类数组的对象 HTMLCollection，包含所有具有指定类名的元素（或空集合）。
+
+4. `querySelector(selector)`
+使用 CSS 选择器语法选择第一个匹配的元素。
+
+5. `querySelectorAll(selector)`
+返回一个类数组的对象 NodeList，包含所有与选择器匹配的元素（或空集合）。
+
+nodelist是静态的，不会随DOM改变而改变。而htmlcollection会。但notelist有forEach方法。
+
+## DOM导航
+
+如何遍历DOM这个树结构。
+
+元素导航：只返回元素节点。
+```javascript
+.firstElementChild
+.lastElementChild
+.nextElementSibling
+.previousElementSibling
+.parentElement
+.children
+```
+
+# Add & change HTML
+
+`document.createElement(tagName)`生成一个`tagName`元素。
+再用`append()`插入到DOM上。
+
+```javascript
+const newH1 = document.createElement("h1");
+newH1.id = "myH1";
+newH1.textContent = "This is a newH1";
+document.body.append(newH1);//加入body，newH1成为其最后一个孩子
+//使用prepend可以是第一个孩子
+
+document.body.insertBefore(newElement, currentElement);//将新元素插入到现有元素前面
+
+document.getElementById(parentId).removeChild(childElement)//可以移除孩子
+```
+# 事件
+
+## 常见的鼠标事件
+1. `click`：当用户点击鼠标时触发。
+2. `dblclick`：当用户双击鼠标时触发。
+3. `mousedown`：当用户按下鼠标按钮时触发。
+4. `mouseup`：当用户释放鼠标按钮时触发。
+5. `mousemove`：当鼠标在元素上移动时触发。
+6. `mouseover`：当鼠标指针移到元素上方时触发。
+7. `mouseout`：当鼠标指针离开元素时触发。
+8. `mouseenter`：当鼠标指针进入元素时触发，仅在元素进入时触发一次。
+9. `mouseleave`：当鼠标指针离开元素时触发，仅在元素离开时触发一次。
+10. `contextmenu`：当用户右击鼠标时触发，通常用于显示上下文菜单。
+
+## 事件监听器
+`element.addEventListener(event, callback)`
+
+当元素监测到事件时，就会执行callback。
+这个callback可以接受一个参数`event`。
+`event.target`: 触发事件的目标元素。
+
+## 常见的键盘事件
+keydown: 当用户按下任意键时触发（键被按下时触发，不论是否释放）。
+keyup: 当用户释放键时触发。
+
+使用`document.addEvenListener(event, callback)`来监听键盘事件。
+
+一些`event.key`
+```
+ArrowDown
+ArrowUp
+ArrowLeft
+ArrowRight
+```
+
+用方向键控制div移动。
+```javascript
+document.addEventListener("keydown", (event)=>{
+    console.log(event);
+    switch (event.key) {
+        case "ArrowDown":
+            y += step;
+            break;
+        case "ArrowUp":
+            y -= step;
+            break;
+        case "ArrowLeft":
+            x -= step;
+            break;
+        case "ArrowRight":
+            x += step;
+            break;
+    }
+    myDiv.style.top = `${y}px`;
+    myDiv.style.left = `${x}px`;
+});
+```
+
+# Show & Hide 元素
+
 
 # 一些东西
 
