@@ -1,7 +1,7 @@
 let body = [{x: 0, y: 0}];
 let direction = {x: 1, y: 0};
 let food = {x: 0, y: 0};
-let gameInterval
+let gameInterval;
 let gameBoard = document.getElementById("gameBoard");
 let boardSize = 20;
 let board = [];

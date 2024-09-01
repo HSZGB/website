@@ -594,6 +594,8 @@ const colors = ["yello", "blue", "green", "red"];
 
 # 对象解构
 
+对象解构是赋值给同名变量。
+
 ```javascript
 const person = {
     name: "alice",
@@ -601,11 +603,41 @@ const person = {
     sex: "female"
 };
 const person2 = {
-    name: "alice",
-    age: 13
+    name2: "alice",
+    age2: 13
 };
 const {name, age, sex} = person;
 const {name2, age2, sex2 = "?"} = person2;//可以设置默认
+```
+
+可以将提取的变量重命名。
+
+```javascript
+const person = {
+  name: "John",
+  age: 25,
+  gender: "male"
+};
+const { name: personName, age: personAge } = person;
+console.log(personName); // 输出: John
+console.log(personAge);  // 输出: 25
+```
+
+嵌套解构
+
+```javascript
+const person = {
+  name: 'Alice',
+  address: {
+    city: 'Wonderland',
+    zipCode: '12345'
+  }
+};
+// 嵌套解构
+const { name, address: { city, zipCode } } = person;
+console.log(name);     // 'Alice'
+console.log(city);     // 'Wonderland'
+console.log(zipCode);  // '12345'
 ```
 
 # 嵌套对象（Nested object）
@@ -790,20 +822,26 @@ import {PI, getArea, getCircumference} from './mathUtil.js';
 
 # 同步（Synchronous）和异步（Asynchronous）
 
+同步操作：在同步操作中，任务会一个接一个地执行。
+当前任务没有完成时，后续任务会被阻塞，必须等到当前任务完成，才能继续执行后面的代码。
+
 ```javascript
 fun1();
 fun2();
 //同步，按顺序执行，fun1执行完后才能执行fun2
 ```
 
-异步
-
-通过callback，promise，async/await等实现。
+异步操作：异步操作允许某个任务在“后台”执行，而不阻塞主线程。
+主程序可以继续执行其他任务，而异步任务完成后，会通过callback、Promise、或者 async/await 的方式来处理结果。
 
 ```javascript
-setTimeout(() => console.log("task 1"), 2000);
+console.log("task 1");
+setTimeout(() => console.log("异步任务"), 2000);
 console.log("task 2");
-//不用等到task1执行完，task2就可以开始执行
+//不用等到other执行完，task2就可以开始执行
+//输出task1 task2 异步任务
+
+
 ```
 
 # Error对象
@@ -960,15 +998,213 @@ document.addEventListener("keydown", (event)=>{
 
 # Show & Hide 元素
 
+```javascript
+display: none;//隐藏
+display: block;//显示
+```
+使用display属性来实现这个功能，它在隐藏时不会占据空间。
 
-# 一些东西
+```javascript
+visibility: hidden;//隐藏
+visibility: visible;//显示
+```
+会保留空间。
 
-扔骰子
+# NoteLists
 
-利用DOM更改innerHTML显示图片
+可以看成元素组成的数组。
 
-# 函数表达式？
+# classList
 
-# CSS
+```javascript
+add(className);
+remove(className);
+toggle(className);//有就添加，没有就删掉
+contains(className);//判断该元素是否有某个class
+replace(oldClass, newClass);
+```
 
-怎么顺序也会有影响
+# Callback Hell
+
+过多callback嵌套会使代码丑陋。
+
+# Promises
+
+```javascript
+function walkDog(callback) {
+    setTimeout(() => {
+        console.log("You walk the dog");
+        callback();
+    }, 1000);
+}
+
+function cleanKitchen(callback) {
+    setTimeout(() => {
+        console.log("You clean the kitchen");
+        callback();
+    }, 1500);  
+}
+
+function takeTrash(callback) {
+    setTimeout(() => {
+        console.log("You take out the trash");
+        callback();
+    }, 500);  
+}
+
+walkDog(() => {
+    cleanKitchen(() => {
+        takeTrash(() => console.log("You finished all the work!"));
+    })
+});
+//如果再多一点任务，就会显得代码丑陋
+```
+
+```javascript
+xx = new Promise((resolve, reject) => {
+    if (成功条件)
+        resolve(value);
+    else
+        reject(error);
+})
+
+创建 Promise 时，传入一个执行器函数（executor）（会被立即执行）
+.then(onFulfilled, onRejected) 用于处理 Promise 成功或失败的结果。
+这个onFulfilled接受的是resolve传进来的东西，onRejected接受reject传入的信息。
+
+.then()方法会返回一个新的 Promise ，每个 then() 的返回值都会被传递给下一个 then()。
+```
+
+优化上面的代码：
+```javascript
+function walkDog() {
+    return new Promise((resolve, reject) => 
+        setTimeout(() => {resolve("You walk the dog");}, 1500));
+}
+
+function cleanKitchen() {
+    return new Promise((resolve, reject) => 
+        setTimeout(() => {resolve("You clean the kitchen");}, 500));
+}
+
+function takeTrash() {
+    return new Promise((resolve, reject) => 
+        setTimeout(() => {resolve("You take out the trash");}, 500));
+}
+
+walkDog().then((value) => {console.log(value); return cleanKitchen();})
+         .then((value) => {console.log(value); return takeTrash();})
+         .then((value) => {console.log(value); console.log("You finish all the work!");});
+         .catch((error) => console.error(error));//如果上面给出的是reject，那么这里会接受其信息。这个程序没写。
+```
+
+# Async & Await
+
+`async`用于声明一个函数为异步函数，这个函数将返回一个promise。
+`await`只能在`async`函数中使用，等待一个 Promise 完成，并返回 Promise 的解析值。
+
+```javascript
+function walkDog() {
+    return new Promise((resolve, reject) => 
+        setTimeout(() => {resolve("You walk the dog");}, 1500));
+}
+
+function cleanKitchen() {
+    return new Promise((resolve, reject) => 
+        setTimeout(() => {resolve("You clean the kitchen");}, 500));
+}
+
+function takeTrash() {
+    return new Promise((resolve, reject) => 
+        setTimeout(() => {resolve("You take out the trash");}, 500));
+}
+
+async function doChores() {
+    let walkDogResult = await walkDog();
+    console.log(walkDogResult);
+
+    let cleanKitchenResult = await cleanKitchen();
+    console.log(cleanKitchen);
+
+    let takeTrashResult = await takeTrash();
+    console.log(takeTrashResult);
+}
+
+doChores();
+```
+
+# JSON
+
+JSON（JavaScript Object Notation）是一种轻量级的数据交换格式。
+
+可以是一个对象，或者一个数组。
+比如
+```javascript
+{
+    "name": "Alice",
+    "age": 30,
+    "isStudent": false
+}
+```
+
+```javascript
+["apple", "orange", "banana"]
+```
+
+## 将JSON字符串解析为javascript对象
+JSON.parse()
+```javascript
+const jsonString = '{"name": "Alice", "age": 25}';
+const obj = JSON.parse(jsonString);
+console.log(obj.name);  // 输出: Alice
+```
+
+## 将javascript对象解析为JSON字符串
+JSON.stringify()
+```javascript
+const obj = { name: "Alice", age: 25 };
+const jsonString = JSON.stringify(obj);
+console.log(jsonString);  // 输出: {"name":"Alice","age":25}
+```
+
+# fetch
+使用fetch可以获取JSON
+
+fetch会得到一个response对象，它是一个promise。
+
+Response 对象的重要属性和方法：
+status: HTTP 状态码 (200, 404, 500 等)
+ok: true 表示状态码在 200-299 范围内，表示请求成功
+headers: 返回头部信息的 Headers 对象
+json(): 将响应体解析为 JSON 对象并返回一个 Promise
+text(): 将响应体解析为文本
+blob(): 将响应体解析为 Blob
+arrayBuffer(): 将响应体解析为 ArrayBuffer
+formData(): 将响应体解析为 FormData
+
+```javascript
+fetch(url)
+    .then(response => response.json())
+    .then(value => console.log(value));
+```
+
+```javascript
+// 获取pokemon宠物图像
+async function fetchData() {
+    try{
+        const pokemonName = document.getElementById("pokemonName").value.toLowerCase();
+        const url = `https://pokeapi.co/api/v2/pokemon/${pokemonName}`;
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error("Could not fetch data");
+        }
+        const data = await response.json();
+        console.log(data);
+        const pokemonSpite = data.sprites.front_default;
+        const imgElement = document.getElementById("pokemonSprite");
+        imgElement.src = pokemonSpite;
+    } catch(error) {
+        console.error(error);
+    }
+}
+```
